@@ -1,7 +1,8 @@
 import discord
 from src import settings
 
-from src.radio.commands import *
+from src.radio.commands import play
+from src.radio.commands import disconnect
 
 async def help (*args, **kwargs):
     """ doctstring help """

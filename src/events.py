@@ -2,6 +2,7 @@ from src import settings
 from discord import Message
 
 import importlib
+import traceback
 import logging
 
 logger = logging.getLogger("discord.py")
@@ -65,6 +66,5 @@ class BaseEvents:
         except AttributeError:
             await message.channel.send(f"'{command}' não existe.")
         except Exception as err:
-            await message.channel.send(
-                f"Command exited with error -> {str(err)}"
-            )
+            await message.channel.send(f"Command exited with error -> {str(err)} -> traceback")
+            await message.channel.send(traceback.format_exc())

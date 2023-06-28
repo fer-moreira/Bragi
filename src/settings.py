@@ -1,10 +1,11 @@
 import discord
 import inspect
 import importlib
+import os
 
 PREFIX = "!"
 
-DISCORD_TOKEN = "TOKEN CHANGED"
+DISCORD_TOKEN = os.environ.get("DISCORD_TOKEN")
 
 COMMANDS_DIR = "src.commands"
 

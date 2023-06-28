@@ -1,5 +1,9 @@
 import yt_dlp
 import json
+import logging
+
+logger = logging.getLogger("discord.py")
+
 
 class YoutubeExtractor:
     def __init__(self) -> None:
@@ -19,41 +23,50 @@ class YoutubeExtractor:
             "source_address": "0.0.0.0",
         }
         self.extractor = yt_dlp.YoutubeDL(self.options)
-        
+
     def get_info(self, target):
         try:
-            return self.extractor.extract_info(
-                target, 
+            info = self.extractor.extract_info(
+                target,
                 download=False
             )
+            return info
         except Exception as r:
             return {}
 
-    def get_formats(self, target):
-        return self.get_info(target).get("formats", [])
-    
-    def get_audios(self, target):
+    def get_formats(self, info):
+        return info.get("formats", [])
+
+    def get_audios(self, info):
         try:
-            formats = self.get_formats(target)
-            
+            formats = self.get_formats(info)
             formats = [
-                format 
+                format
                 for format in formats
-                if format.get("resolution", "none") == "audio only"
+                if "audio" in format.get("format")
             ]
-            
             return formats
         except:
             return []
 
-    def extract_bestaudio_url(self, target):
-        try:
-            audios = self.get_audios(target)
-            best_audio = None
-            
-            if audios and len(audios) > 0:
-                best_audio = audios[0]
-                
-            return best_audio["url"]
-        except:
-            raise
+    def extract_song_data(self, target):
+        info = self.get_info(target)
+        
+        audios = [
+            audio 
+            for audio in self.get_audios(info) 
+            if audio.get("ext") == "mp4"
+        ]
+        
+        if not audios:
+            return {}
+        
+        if len(audios) > 0: 
+            best_audio = audios[0]
+        else: best_audio = audios
+
+        return {
+            "url"       : best_audio.get("url", None),
+            "title"     : info.get("title", None),
+            "thumbnail" : info.get("thumbnail", None)
+        }
