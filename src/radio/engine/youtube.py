@@ -1,5 +1,4 @@
 import yt_dlp
-import json
 import logging
 
 logger = logging.getLogger("discord.py")
@@ -31,7 +30,7 @@ class YoutubeExtractor:
                 download=False
             )
             return info
-        except Exception as r:
+        except Exception as error:
             return {}
 
     def get_formats(self, info):
@@ -61,12 +60,13 @@ class YoutubeExtractor:
         if not audios:
             return {}
         
-        if len(audios) > 0: 
-            best_audio = audios[0]
-        else: best_audio = audios
+        if len(audios) > 0:
+            best_audio = audios[1]
+        else:
+            best_audio = audios
 
         return {
             "url"       : best_audio.get("url", None),
-            "title"     : info.get("title", None),
+            "title"     : info.get("title",     None),
             "thumbnail" : info.get("thumbnail", None)
         }

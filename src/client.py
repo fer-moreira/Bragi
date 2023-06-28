@@ -18,5 +18,4 @@ class DiscordClient(Client, BaseEvents):
         self.reconnect = True
     
     def run(self):
-        print("Trying to run")
         return super().run(self.token, reconnect=self.reconnect)

@@ -51,10 +51,17 @@ class BaseEvents:
     
     async def handle_interaction (self, message : Message, command, content, clean_content):
         try:
-            module = importlib.import_module(settings.COMMANDS_DIR)
-            _command = getattr(module, command)
+            if not command in settings.COMMANDS_MAP.keys():
+                await message.channel.send(f"'{settings.PREFIX}{command}' não é um comando válido.")
+                return
             
-            await _command(
+            cmd_method = getattr(
+                importlib.import_module(
+                    settings.COMMANDS_MAP.get(command)
+                )
+            , "command")
+            
+            await cmd_method(
                 ctx=self,
                 message=message,
                 channel=message.channel,
@@ -63,8 +70,6 @@ class BaseEvents:
                 clean_content=clean_content
             )
             
-        except AttributeError:
-            await message.channel.send(f"'{command}' não existe.")
         except Exception as err:
-            await message.channel.send(f"Command exited with error -> {str(err)} -> traceback")
+            await message.channel.send(f"Command exited with error -> {str(err)} -> traceback:")
             await message.channel.send(traceback.format_exc())
