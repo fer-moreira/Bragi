@@ -4,7 +4,7 @@ import importlib
 
 PREFIX = "!"
 
-DISCORD_TOKEN = "MTA1NDk2MDkwNTEwNTk2OTE3Mg.GJSYYP.26HWpEYacPrQM9VoCGSNqcvezCdJ-cZgnCT-zE"
+DISCORD_TOKEN = "TOKEN CHANGED"
 
 COMMANDS_DIR = "src.commands"
 
