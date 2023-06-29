@@ -1,4 +1,5 @@
 import discord
+import math
 from src.settings import PREFIX
 from src.music.player import CurrentPlayer
 
@@ -12,16 +13,27 @@ ACCEPTS_ARGS = False
 async def command (*args, **kwargs):
     channel = kwargs["channel"]
     
+    if not CurrentPlayer.queue:
+        await channel.send("empty queue")
+        return
+    
+    _now = CurrentPlayer.now_playing["title"]
+    
     _description = "\n".join([
         f"{index}. {song['title']}" 
-        for index, song in enumerate(CurrentPlayer.queue)
+        for index, song in enumerate(CurrentPlayer.queue[:10])
     ])
     
-    _now = CurrentPlayer.now_playing
     
     embed = discord.Embed()
     embed.title = "⏭️ Fila de músicas"
-    embed.description="**Tocando agora:** {_now} \n\n{_description}"
-    embed.set_footer(text="Página 1/2")
+    embed.description=f"**Tocando agora:** {_now} \n\n{_description}"
+    
+    try:
+        page_count = math.ceil(len(CurrentPlayer.queue) / 10)
+    except:
+        page_count = "+8000"
+    
+    embed.set_footer(text=f"Página 1/{page_count}")
 
     await channel.send(embed=embed)

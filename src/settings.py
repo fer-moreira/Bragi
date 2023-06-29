@@ -10,7 +10,10 @@ COMMANDS_MAP = {
     "ping" : "src.commands.ping",
     
     # music
-    "play" : "src.music.commands.play"
+    "play"       : "src.music.commands.play",
+    "queue"      : "src.music.commands.queue",
+    "skip"       : "src.music.commands.skip",
+    "disconnect" : "src.music.commands.disconnect"
 }
 
 CATEGORY_MAP = {
