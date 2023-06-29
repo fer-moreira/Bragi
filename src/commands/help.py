@@ -20,9 +20,9 @@ def get_command_embed (command):
     
     cmd_module = importlib.import_module(command_path)
     
-    embed = discord.Embed()
-    embed.title = cmd_module.USAGE
-    embed.description = cmd_module.DESCRIPTION
+    embed               = discord.Embed()
+    embed.title         = cmd_module.USAGE
+    embed.description   = cmd_module.DESCRIPTION
     
     if cmd_module.ACCEPTS_ARGS:
         embed.add_field(name="Usage", value=f"`{cmd_module.COMMAND} <argument>`", inline=True)

@@ -68,5 +68,6 @@ class YoutubeExtractor:
         return {
             "url"       : best_audio.get("url", None),
             "title"     : info.get("title",     None),
-            "thumbnail" : info.get("thumbnail", None)
+            "thumbnail" : info.get("thumbnail", None),
+            "duration"  : info.get("duration_string", "24 hrs")
         }
