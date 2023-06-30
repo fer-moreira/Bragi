@@ -2,8 +2,7 @@ from importlib import import_module
 from src.base import BaseCommand
 
 def find_class (path, classname) -> BaseCommand:
-    c = getattr(import_module(path), classname)
-    return c()
+    return getattr(import_module(path), classname)()
     
 
 def find_class_by_path (path) -> BaseCommand:
