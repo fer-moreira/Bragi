@@ -1,4 +1,4 @@
-from src.music.player import CurrentPlayer
+from src.music.player import Jukebox
 from src.base import BaseCommand
 
 
@@ -10,11 +10,8 @@ class RemoveCommand (BaseCommand):
         self.HAS_ARGUMENTS = True
         self.ARGUMENT_LABEL = "music index from queue"
     
-    async def run (*args, **kwargs):
-        try:
-            await CurrentPlayer.remove_from_queue(
-                kwargs['channel'], 
-                int(kwargs['clean_content'])
-            )
-        except:
-            await kwargs['channel'].send("⛔ Could not find that song in the queue.")
+    async def run (self, *args, **kwargs):
+        await Jukebox.remove_from_queue(
+            kwargs['channel'], 
+            kwargs['clean_content']
+        )

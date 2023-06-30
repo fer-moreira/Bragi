@@ -2,7 +2,7 @@ import json
 import discord
 import asyncio
 
-from src.music.player import CurrentPlayer
+from src.music.player import Jukebox
 from src.music.engine.youtube import YoutubeExtractor
 from src.base import BaseCommand
 
@@ -22,11 +22,11 @@ class PlayCommand (BaseCommand):
         youtube_url = kwargs["clean_content"]
         
         
-        if not CurrentPlayer.voice_client:
+        if not Jukebox.voice_client:
             voice_channel = message.author.voice.channel
-            CurrentPlayer.voice_client = await voice_channel.connect()
+            Jukebox.voice_client = await voice_channel.connect()
         
-        searching_message = await channel.send("<a:loading:1123724699017416945> Pesquisando...")
+        searching_message = await channel.send(self.LOCALE("PLAY_CMD_SEARCH"))
         
         try:
             song = YoutubeExtractor().extract_song_data(youtube_url)
@@ -34,10 +34,10 @@ class PlayCommand (BaseCommand):
                 "author" : message.author
             })
             
-            await CurrentPlayer.add_to_queue(channel, song)
+            await Jukebox.add_to_queue(channel, song)
             
-            if not CurrentPlayer.voice_client.is_playing():
-                await CurrentPlayer.play_next(ctx, channel)
+            if not Jukebox.voice_client.is_playing():
+                await Jukebox.play_next(ctx, channel)
                 await searching_message.delete()
             else:
                 await searching_message.delete()

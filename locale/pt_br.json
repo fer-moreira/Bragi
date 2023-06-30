@@ -1,3 +1,19 @@
 {
-    "msg_01" : "Adicionado a queue"
+    "GENERIC_ERROR_IDLE"         : "⛔ Não estou tocando nada.",
+    "GENERIC_ERROR_DISCONNECTED" : "⛔ Saindo do canal de voz.",
+
+
+    "PLAY_CMD_SEARCH" : "<a:loading:1123724699017416945> Pesquisando...",
+
+    "PLAYER_NOWPLAYING_EMBED_TITLE"     : "💿 Tocando agora",
+    "PLAYER_NOWPLAYING_EMBEB_REQUESTED" : "Solicitado por: @{author}",
+    "PLAYER_QUEUE_EMBED_TITLE"          : "🔢 Adicionado a fila",
+    "PLAYER_QUEUE_EMBED_POSITION"       : "`Posição: #{position}`",
+    "PLAYER_QUEUE_REMOVED_LABEL"        : "✅ `{title}` removido da playlist.",
+    "PLAYER_QUEUE_REMOVED_ERROR"        : "⛔ Não encontrei essa música na playlist",
+
+    "QUEUE_CMD_EMBED_TITLE"     : "⏭️ Fila de músicas",
+    "QUEUE_CMD_EMBED_DESC"      : "**Tocando agora:** {now} \n\n{description}",
+    "QUEUE_CMD_EMBED_PAGECOUNT" : "Página 1/{count}"
+
 }

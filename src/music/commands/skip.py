@@ -1,4 +1,4 @@
-from src.music.player import CurrentPlayer
+from src.music.player import Jukebox
 from src.base import BaseCommand
 
 class SkipCommand (BaseCommand):
@@ -10,6 +10,6 @@ class SkipCommand (BaseCommand):
         
     async def run (self, *args, **kwargs):
         try:
-            await CurrentPlayer.skip()
+            await Jukebox.skip()
         except ValueError as r:
-            await kwargs["channel"].send("No song playing")
+            await kwargs["channel"].send(self.LOCALE("GENERIC_ERROR_IDLE"))

@@ -1,6 +1,7 @@
 
 import asyncio
 import discord
+from src.locale import LOCALE
 
 class MusicPlayer:
     def __init__(self):
@@ -9,22 +10,38 @@ class MusicPlayer:
         self.now_playing = None
         
     def playing_embed (self, song):
-        embed = discord.Embed(title="💿 Tocando agora")
+        embed = discord.Embed(
+            title=LOCALE.get(
+                "PLAYER_NOWPLAYING_EMBED_TITLE"
+            )
+        )
         embed.add_field(
             name=song['title'],
             value=f"`[0:00 / {song['duration']}]`"
         )
         embed.set_thumbnail(url=song['thumbnail'])
-        embed.set_footer(text=f"Solicitado por: @{song['author']}")
+        embed.set_footer(
+            text=LOCALE.get(
+                "PLAYER_NOWPLAYING_EMBEB_REQUESTED"
+            ).format(
+                author=song['author']
+            )
+        )
         
         return embed
     
     def queue_embed (self, song):
-        embed = discord.Embed(title="🔢 Adicionado a fila")
+        embed = discord.Embed(
+            title=LOCALE.get("PLAYER_QUEUE_EMBED_TITLE")
+        )
 
         embed.add_field(
             name=song['title'],
-            value=f"`Posição: #{song.get('position', 0)}`"
+            value=LOCALE.get(
+                "PLAYER_QUEUE_EMBED_POSITION"
+            ).format(
+                position=song.get('position', 0)
+            )
         )
 
         embed.set_thumbnail(url=song["thumbnail"])
@@ -44,12 +61,18 @@ class MusicPlayer:
         if self.now_playing:
             await channel.send(embed=self.queue_embed(song))
             
-    async def remove_from_queue(self, channel, index):
+    async def remove_from_queue(self, channel, to_remove):
         try:
-            await channel.send(f"✅ Removed {self.queue[index]['title']} from the queue.")
+            index = int(int(to_remove) - 1)
+            
+            await channel.send(LOCALE.get(
+                "PLAYER_QUEUE_REMOVED_LABEL"
+            ).format(
+                title=self.queue[index]['title']
+            ))
             del self.queue[index]
         except:
-            await channel.send("⛔ Could not find that song in the queue.")
+            await channel.send(LOCALE.get("PLAYER_QUEUE_REMOVED_ERROR"))
         
     async def play_next(self, ctx : discord.Client, channel):
         if self.queue:
@@ -62,8 +85,9 @@ class MusicPlayer:
                 after=lambda e: ctx.loop.create_task(self.play_next(ctx, channel))
             )
         else:
-            asyncio.sleep(10)
+            await asyncio.sleep(30)
             await self.disconnect()
+            await channel.send(LOCALE.get("GENERIC_ERROR_DISCONNECTED"))
 
     async def disconnect(self):
         await self.voice_client.disconnect()
@@ -78,4 +102,4 @@ class MusicPlayer:
             raise ValueError("I'm not playing anything.")
 
 
-CurrentPlayer = MusicPlayer()
+Jukebox = MusicPlayer()

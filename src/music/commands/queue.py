@@ -1,6 +1,6 @@
 import discord
 import math
-from src.music.player import CurrentPlayer
+from src.music.player import Jukebox
 from src.base import BaseCommand
 
 class QueueCommand (BaseCommand):
@@ -13,27 +13,38 @@ class QueueCommand (BaseCommand):
     async def run (self, *args, **kwargs):
         channel = kwargs["channel"]
         
-        if not CurrentPlayer.voice_client:
-            await channel.send("I'm not playing anything.")
+        if not Jukebox.voice_client:
+            await channel.send(self.LOCALE("GENERIC_ERROR_IDLE"))
             return
         
-        _now = CurrentPlayer.now_playing["title"]
+        _now = Jukebox.now_playing["title"]
         
         _description = "\n".join([
             f"{index}. {song['title']}" 
-            for index, song in enumerate(CurrentPlayer.queue[:10])
+            for index, song in enumerate(Jukebox.queue[:10])
         ])
         
         
         embed = discord.Embed()
-        embed.title = "⏭️ Fila de músicas"
-        embed.description=f"**Tocando agora:** {_now} \n\n{_description}"
+        embed.title = self.LOCALE("QUEUE_CMD_EMBED_TITLE")
+        embed.description=self.LOCALE(
+            "QUEUE_CMD_EMBED_DESC"
+        ).format(
+            now=_now,
+            description=_description
+        )
         
         try:
-            page_count = math.ceil(len(CurrentPlayer.queue) / 10)
+            page_count = math.ceil(len(Jukebox.queue) / 10)
         except:
             page_count = "+8000"
         
-        embed.set_footer(text=f"Página 1/{page_count}")
+        embed.set_footer(text=
+            self.LOCALE(
+                "QUEUE_CMD_EMBED_PAGECOUNT"
+            ).format(
+                count=page_count
+            )
+        )
 
         await channel.send(embed=embed)

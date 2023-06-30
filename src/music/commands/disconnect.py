@@ -1,4 +1,4 @@
-from src.music.player import CurrentPlayer
+from src.music.player import Jukebox
 from src.base import BaseCommand
 
 
@@ -9,6 +9,6 @@ class DisconnectCommand (BaseCommand):
         self.DESCRIPTION = "Disconnect bot from voice channel."
         self.HAS_ARGUMENTS = False
     
-    async def run (*args, **kwargs):
-        await kwargs["channel"].send("fodase entao")
-        await CurrentPlayer.disconnect()
+    async def run (self, *args, **kwargs):
+        await kwargs["channel"].send(self.LOCALE("GENERIC_ERROR_DISCONNECTED"))
+        await Jukebox.disconnect()
