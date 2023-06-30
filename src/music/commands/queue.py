@@ -13,7 +13,7 @@ class QueueCommand (BaseCommand):
     async def run (self, *args, **kwargs):
         channel = kwargs["channel"]
         
-        if not CurrentPlayer.voice_client or not CurrentPlayer.queue:
+        if not CurrentPlayer.voice_client:
             await channel.send("I'm not playing anything.")
             return
         

@@ -45,10 +45,12 @@ class HelpCommand (BaseCommand):
         return embed
 
     def all_commands(self):
+        # create empty data structure based on category
         BY_CATEGORY = {
             cat: []
             for cat in CATEGORY_MAP.keys()
         }
+        
         
         # Populate categories with the commands and clear empty categories
         BY_CATEGORY = {

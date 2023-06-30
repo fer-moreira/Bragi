@@ -10,5 +10,5 @@ class DisconnectCommand (BaseCommand):
         self.HAS_ARGUMENTS = False
     
     async def run (*args, **kwargs):
-        kwargs["channel"].send("fodase entao")
+        await kwargs["channel"].send("fodase entao")
         await CurrentPlayer.disconnect()

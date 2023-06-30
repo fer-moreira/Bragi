@@ -48,7 +48,7 @@ class YoutubeExtractor:
         except:
             return []
 
-    def extract_song_data(self, target):
+    def extract_song_data(self, target) -> dict:
         info = self.get_info(target)
         
         audios = [

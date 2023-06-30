@@ -14,10 +14,11 @@ COMMANDS_MAP = {
     "skip"       : "src.music.commands.skip.SkipCommand",
     "queue"      : "src.music.commands.queue.QueueCommand",
     "disconnect" : "src.music.commands.disconnect.DisconnectCommand",
+    "remove"     : "src.music.commands.remove.RemoveCommand",
 }
 
 CATEGORY_MAP = {
     "utility"  : "🔧 Utility",
-    "music  "  : "🎵 Music  ",
+    "music"    : "🎵 Music",
     "fallback" : "🗿 Generic"
 }

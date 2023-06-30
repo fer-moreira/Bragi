@@ -13,28 +13,6 @@ class PlayCommand (BaseCommand):
         self.DESCRIPTION    = "Play music."
         self.HAS_ARGUMENTS  = True
         self.ARGUMENT_LABEL = "youtube url"
-        
-    def playing_embed (self):
-        embed = discord.Embed(title="💿 Tocando agora")
-        embed.add_field(
-            name="TÁ FALANDO QUE ME AMA - MC RB [ PL TORVIC ]",
-            value="`[0:00 / 02:17]`"
-        )
-        embed.set_thumbnail(url="https://i.ytimg.com/vi/CEzKEoFozwE/hqdefault.jpg")
-        embed.set_footer(text="Solicitado por: @Carvalho")
-        
-        return embed
-    
-    def queue_embed (self):
-        embed = discord.Embed(title="🔢 Adicionado a fila")
-
-        embed.add_field(
-            name="DE 4 EU JOGO RABO, SEQUENCIA DE TOMA TOMA, SEQUENCIA DE VAPO VAPO ♪ ♫ MC INGRYD 2020",
-            value="`Posição: #1`"
-        )
-
-        embed.set_thumbnail(url="https://i.ytimg.com/vi/CEzKEoFozwE/hqdefault.jpg")
-        return embed
 
     async def run(self, *args, **kwargs):
         ctx : discord.Client = kwargs["ctx"]
@@ -52,15 +30,16 @@ class PlayCommand (BaseCommand):
         
         try:
             song = YoutubeExtractor().extract_song_data(youtube_url)
+            song.update({
+                "author" : message.author
+            })
             
-            CurrentPlayer.add_to_queue(song)
+            await CurrentPlayer.add_to_queue(channel, song)
             
             if not CurrentPlayer.voice_client.is_playing():
-                await CurrentPlayer.play_next(ctx)
+                await CurrentPlayer.play_next(ctx, channel)
                 await searching_message.delete()
-                await channel.send(embed=self.playing_embed())
             else:
                 await searching_message.delete()
-                await channel.send(embed=self.queue_embed())
         except:
             raise
