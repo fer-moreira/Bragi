@@ -14,4 +14,3 @@ class BaseCommand:
     
     async def run (self, *args, **kwargs):
         await kwargs["channel"].send("Example Command")
-        
