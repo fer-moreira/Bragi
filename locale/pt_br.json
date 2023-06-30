@@ -12,6 +12,10 @@
     "PLAYER_QUEUE_REMOVED_LABEL"        : "✅ `{title}` removido da playlist.",
     "PLAYER_QUEUE_REMOVED_ERROR"        : "⛔ Não encontrei essa música na playlist",
 
+    "CLEAR_CMD_DELETED_MESSAGES"        : "🧹 Foram deletadas {qtd_messages} mensagens.",
+    "CLEAR_CMD_SPECIFY_NUMBER"          : "⛔ Informe apenas números.",
+    "CLEAR_CMD_EMPTY"                   : "⚠️ Especifique quantas mensagens você quer apagar.",
+
     "QUEUE_CMD_EMBED_TITLE"     : "⏭️ Fila de músicas",
     "QUEUE_CMD_EMBED_DESC"      : "**Tocando agora:** {now} \n\n{description}",
     "QUEUE_CMD_EMBED_PAGECOUNT" : "Página 1/{count}"
