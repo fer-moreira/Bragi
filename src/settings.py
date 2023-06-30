@@ -8,6 +8,7 @@ COMMANDS_MAP = {
     # utility
     "help"      : "src.commands.help.HelpCommand",
     "ping"      : "src.commands.ping.PingCommand",
+    "clear"      : "src.commands.clear.ClearCommand",
     
     # music
     "play"       : "src.music.commands.play.PlayCommand",

@@ -36,6 +36,8 @@ class QueueCommand (BaseCommand):
         
         try:
             page_count = math.ceil(len(Jukebox.queue) / 10)
+            if page_count == 0:
+                page_count = 1
         except:
             page_count = "+8000"
         
