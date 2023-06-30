@@ -1,43 +1,97 @@
 import discord
 import importlib
-from src.settings import PREFIX, COMMANDS_MAP
-
-USAGE = "help"
-
-COMMAND = f"{PREFIX}{USAGE}"
-
-CATEGORY = "utility"
-
-DESCRIPTION = "Provides you with the commands list.\nDo `!help <command>` for extended command info."
-
-ACCEPTS_ARGS = True
+from src.base import BaseCommand
+from src.settings import PREFIX, COMMANDS_MAP, CATEGORY_MAP
+from src.utils import find_class_by_path
 
 
-def get_command_embed (command):
-    command_path = COMMANDS_MAP.get(command, None)
+class HelpCommand (BaseCommand):
+    def __init__(self):
+        super().__init__()
+        
+        self.COMMAND = "help"
+        self.CATEGORY = "utility"
+        self.HAS_ARGUMENTS = True
+        self.ARGUMENT_LABEL = "command"
+        self.DESCRIPTION = f"""Provides you with the commands list.
+        Do `!help <{self.ARGUMENT_LABEL}>` for extended command info."""
     
-    if not command_path: return {}
-    
-    cmd_module = importlib.import_module(command_path)
-    
-    embed               = discord.Embed()
-    embed.title         = cmd_module.USAGE
-    embed.description   = cmd_module.DESCRIPTION
-    
-    if cmd_module.ACCEPTS_ARGS:
-        embed.add_field(name="Usage", value=f"`{cmd_module.COMMAND} <argument>`", inline=True)
-    
-    embed.add_field(name="Example", value=f"`{cmd_module.COMMAND}`", inline=True)
-    
-    return embed
+    def command_detailed_info(self, command):
+        command_path = COMMANDS_MAP.get(command)
+        
+        if not command_path:
+            return {}
+        
+        cmd_module = find_class_by_path(command_path)
+        
+        embed = discord.Embed(
+            title=cmd_module.COMMAND,
+            description=cmd_module.DESCRIPTION
+        )
+        
+        if cmd_module.HAS_ARGUMENTS:
+            embed.add_field(
+                name="Usage",
+                value=f"`{cmd_module.EXAMPLE} <{cmd_module.ARGUMENT_LABEL}>`",
+                inline=True
+            )
+        
+        embed.add_field(
+            name="Example",
+            value=f"`{cmd_module.EXAMPLE}`",
+            inline=True
+        )
+        
+        return embed
 
-
-async def command (*args, **kwargs):
-    channel = kwargs["channel"]
-    clean_content = kwargs["clean_content"]
+    def all_commands(self):
+        BY_CATEGORY = {
+            cat: []
+            for cat in CATEGORY_MAP.keys()
+        }
+        
+        # Populate categories with the commands and clear empty categories
+        BY_CATEGORY = {
+            category: [
+                command.COMMAND
+                for commands_path in COMMANDS_MAP.values()
+                for command in [find_class_by_path(commands_path)]
+                if command.CATEGORY == category
+            ]
+            for category in BY_CATEGORY.keys()
+        }
+        
+        # Quick way to clear categories without commands
+        BY_CATEGORY = {
+            category: command 
+            for category, command in BY_CATEGORY.items() 
+            if command
+        }
+        
+        # Build embed description
+        _desc = [
+            f"""{CATEGORY_MAP.get(cat)}
+            {", ".join([f"`{cmd}`" for cmd in cmds])}"""
+            for cat, cmds in BY_CATEGORY.items()
+        ]
+        
+        # Build embed
+        embed = discord.Embed(
+            title="Todos os Comandos",
+            description="\n\n".join(_desc)
+        )
+        
+        return embed
+        
     
-    if clean_content:
-        embed = get_command_embed(clean_content)
-        await channel.send(embed=embed)
-    else:
-        await channel.send("xereca")
+    async def run(self, *args, **kwargs):
+        channel = kwargs["channel"]
+        desired_command = kwargs["clean_content"]
+        
+        if desired_command:
+            embed = self.command_detailed_info(desired_command)
+            await channel.send(embed=embed)
+        else:
+            embed = self.all_commands()
+            await channel.send(embed=embed)
+

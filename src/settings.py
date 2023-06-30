@@ -6,17 +6,18 @@ DISCORD_TOKEN = os.environ.get("DISCORD_TOKEN")
 
 COMMANDS_MAP = {
     # utility
-    "help" : "src.commands.help",
-    "ping" : "src.commands.ping",
+    "help"      : "src.commands.help.HelpCommand",
+    "ping"      : "src.commands.ping.PingCommand",
     
     # music
-    "play"       : "src.music.commands.play",
-    "queue"      : "src.music.commands.queue",
-    "skip"       : "src.music.commands.skip",
-    "disconnect" : "src.music.commands.disconnect"
+    "play"       : "src.music.commands.play.PlayCommand",
+    "skip"       : "src.music.commands.skip.SkipCommand",
+    "queue"      : "src.music.commands.queue.QueueCommand",
+    "disconnect" : "src.music.commands.disconnect.DisconnectCommand",
 }
 
 CATEGORY_MAP = {
-    "utility" : "🔧 Utility",
-    "music"   : "🎵 Music"
+    "utility"  : "🔧 Utility",
+    "music  "  : "🎵 Music  ",
+    "fallback" : "🗿 Generic"
 }

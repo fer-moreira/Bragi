@@ -1,13 +1,14 @@
 from src.music.player import CurrentPlayer
-from src.settings import PREFIX
+from src.base import BaseCommand
 
-USAGE        = "disconnect"
-COMMAND      = f"{PREFIX}{USAGE}"
-CATEGORY     = "music"
-DESCRIPTION  = "Disconnect bot from voice channel."
-ACCEPTS_ARGS = False
 
-async def command (*args, **kwargs):
-    channel = kwargs["channel"]
-    channel.send("adeus")
-    await CurrentPlayer.disconnect()
+class DisconnectCommand (BaseCommand):
+    def __init__(self):
+        self.COMMAND = "disconnect"
+        self.CATEGORY = "music"
+        self.DESCRIPTION = "Disconnect bot from voice channel."
+        self.HAS_ARGUMENTS = False
+    
+    async def run (*args, **kwargs):
+        kwargs["channel"].send("fodase entao")
+        await CurrentPlayer.disconnect()

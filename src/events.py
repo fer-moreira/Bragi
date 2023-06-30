@@ -1,19 +1,17 @@
 from src import settings
 from discord import Message
 
-import importlib
 import traceback
 import logging
+
+from src.utils import find_class_by_path
+from src.base import BaseCommand
 
 logger = logging.getLogger("discord.py")
 
 class BaseEvents:
     async def on_ready (self):
         logger.info("Bot inicializado.")
-        
-    # async def on_voice_state_update(self, member, before, after):
-    #     if member == self.user and not after.channel:
-    #         print("VOICE DISCONNECTEDS")
     
     async def on_message(self, message : Message):
         if message.author == self.user:
@@ -55,13 +53,10 @@ class BaseEvents:
                 await message.channel.send(f"'{settings.PREFIX}{command}' não é um comando válido.")
                 return
             
-            cmd_method = getattr(
-                importlib.import_module(
-                    settings.COMMANDS_MAP.get(command)
-                )
-            , "command")
+            command_path = settings.COMMANDS_MAP.get(command)
+            command_class : BaseCommand = find_class_by_path(command_path)
             
-            await cmd_method(
+            await command_class.run(
                 ctx=self,
                 message=message,
                 channel=message.channel,

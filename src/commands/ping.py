@@ -1,16 +1,13 @@
-from src.settings import PREFIX
+from src.base import BaseCommand
 
-USAGE = "ping"
-
-COMMAND = f"{PREFIX}{USAGE}"
-
-CATEGORY = "utility"
-
-DESCRIPTION = "Shows Enigma's latency to Discord's API."
-
-ACCEPTS_ARGS = False
-
-async def command (*args, **kwargs):
-    channel = kwargs["channel"]
-    ctx : discord.Client = kwargs["ctx"]
-    await channel.send(f"Pong! {round(ctx.latency * 1000)}ms")
+class PingCommand (BaseCommand):
+    def __init__(self):
+        super().__init__()
+        
+        self.COMMAND       = "ping"
+        self.CATEGORY      = "utility"
+        self.DESCRIPTION   = "Shows Enigma's latency to Discord's API."
+        self.HAS_ARGUMENTS = False
+        
+    async def run (self, *args, **kwargs):
+        await kwargs['channel'].send(f"Pong! { round(kwargs['ctx'].latency * 1000) }ms")

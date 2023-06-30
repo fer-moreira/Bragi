@@ -40,7 +40,7 @@ class MusicPlayer:
         if self.voice_client and self.voice_client.is_playing():
             self.voice_client.stop()
         else:
-            raise ValueError("No song is currently playing.")
+            raise ValueError("I'm not playing anything.")
 
 
 CurrentPlayer = MusicPlayer()
