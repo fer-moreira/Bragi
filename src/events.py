@@ -66,5 +66,8 @@ class BaseEvents:
             )
             
         except Exception as err:
+            logger.error(f"Command exited with error -> {str(err)} -> traceback:")
+            logger.error(traceback.format_exc())
+            
             await message.channel.send(f"Command exited with error -> {str(err)} -> traceback:")
             await message.channel.send(traceback.format_exc())

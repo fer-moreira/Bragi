@@ -3,7 +3,6 @@ import logging
 
 logger = logging.getLogger("discord.py")
 
-
 class YoutubeExtractor:
     def __init__(self) -> None:
         self.options = {
@@ -25,10 +24,7 @@ class YoutubeExtractor:
 
     def get_info(self, target):
         try:
-            info = self.extractor.extract_info(
-                target,
-                download=False
-            )
+            info = self.extractor.extract_info(target, download=False)
             return info
         except Exception as error:
             return {}
@@ -47,10 +43,8 @@ class YoutubeExtractor:
             return formats
         except:
             return []
-
-    def extract_song_data(self, target) -> dict:
-        info = self.get_info(target)
-        
+    
+    def mount_unique_song(self, info) -> dict:
         audios = [
             audio 
             for audio in self.get_audios(info) 
@@ -71,3 +65,24 @@ class YoutubeExtractor:
             "thumbnail" : info.get("thumbnail", None),
             "duration"  : info.get("duration_string", "24 hrs")
         }
+
+
+    def extract_song_data(self, target) -> list:
+        songs = []
+        info = self.get_info(target)
+        
+        target_type = info.get("_type", "unique")
+                
+        if target_type == "unique":
+            songs.append(
+                self.mount_unique_song(info)
+            )
+        else:
+            entries = info.get("entries")
+            
+            for entry in entries:
+                songs.append(
+                    self.mount_unique_song(entry)
+                )
+                
+        return songs

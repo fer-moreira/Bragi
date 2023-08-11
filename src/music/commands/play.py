@@ -29,17 +29,21 @@ class PlayCommand (BaseCommand):
         searching_message = await channel.send(self.LOCALE("PLAY_CMD_SEARCH"))
         
         try:
-            song = YoutubeExtractor().extract_song_data(youtube_url)
-            song.update({
-                "author" : message.author
-            })
+            songs = YoutubeExtractor().extract_song_data(youtube_url)
             
-            await Jukebox.add_to_queue(channel, song)
-            
-            if not Jukebox.voice_client.is_playing():
-                await Jukebox.play_next(ctx, channel)
-                await searching_message.delete()
-            else:
-                await searching_message.delete()
+            for song_entry in songs:
+                song = song_entry
+                song.update({
+                    "author" : message.author
+                })
+                
+                await Jukebox.add_to_queue(channel, song)
+                
+                if not Jukebox.voice_client.is_playing():
+                    await Jukebox.play_next(ctx, channel)
+                    # await searching_message.delete()
+                else:
+                    pass
+                    # await searching_message.delete()
         except:
             raise
